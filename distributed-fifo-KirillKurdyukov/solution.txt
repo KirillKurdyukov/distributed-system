@@ -1,0 +1,51 @@
+Kirill Kurdyukov
+ProcessLamportMutex
+#actions
+{2 SEND 1} 2, REQ, 1
+{1 SEND 2} 4, OK
+{1 SEND 2} 2, REQ, 1
+{2 SEND 1} 8, OK
+{1 SEND 2} 10, REL
+{1 SEND 2} 12, REQ, 11
+{2 SEND 1} 14, OK
+{2 SEND 1} 10, REQ, 9
+{1 SEND 2} 17, OK
+{2 SEND 1} 6, REL
+#process 1
+0 LockRequest
+40 {1 SEND 2} 2, REQ, 1
+80 {1 RCVD 2} 2, REQ, 1
+120 {1 SEND 2} 4, OK
+400 {1 RCVD 2} 8, OK
+440 Lock
+480 Unlock
+520 {1 SEND 2} 10, REL
+589 LockRequest
+600 {1 SEND 2} 12, REQ, 11
+720 {1 RCVD 2} 14, OK
+760 {1 RCVD 2} 10, REQ, 9
+800 {1 SEND 2} 17, OK
+840 {1 RCVD 2} 6, REL
+880 Lock
+920 Unlock
+960 {1 SEND 2} 19, REL
+#process 2
+0 LockRequest
+40 {2 SEND 1} 2, REQ, 1
+160 {2 RCVD 1} 4, OK
+200 Lock
+240 Unlock
+280 {2 SEND 1} 6, REL
+320 {2 RCVD 1} 2, REQ, 1
+360 {2 SEND 1} 8, OK
+400 LockRequest
+440 {2 SEND 1} 10, REQ, 9
+560 {2 RCVD 1} 10, REL
+640 {2 RCVD 1} 12, REQ, 11
+680 {2 SEND 1} 14, OK
+840 {2 RCVD 1} 17, OK
+880 Lock
+920 Unlock
+960 {2 SEND 1} 19, REL
+1000 LockRequest
+1040 {2 SEND 1} 21, REQ, 20
